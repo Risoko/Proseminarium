@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  db2:
+    image: postgres
+    environment:
+      POSTGRES_DB: classic
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test123
+    logging:
+      driver: none
+  pgadmin42:
+    image: dpage/pgadmin4
+    environment: 
+      PGADMIN_DEFAULT_EMAIL: example@email.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5002:80"
+    depends_on:
+      - db2
+    logging:
+      driver: none
+  backend2:
+    build: ./classic
+    volumes: 
+      - ./classic:/src/backend
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8003"
+    ports:
+      - "8003:8003"
+    depends_on: 
+      - db2

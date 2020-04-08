@@ -1,0 +1,46 @@
+version: "3.7"
+
+services:
+  db3:
+    image: postgres
+    environment:
+      POSTGRES_DB: rest
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test123
+    logging:
+      driver: none
+  pgadmin43:
+    image: dpage/pgadmin4
+    environment: 
+      PGADMIN_DEFAULT_EMAIL: example@email.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5005:80"
+    depends_on:
+      - db3
+    logging:
+      driver: none
+  backend3:
+    build: ./rest
+    volumes: 
+      - ./rest:/app/backend
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8005"
+    ports:
+      - "8005:8005"
+    depends_on: 
+      - db3
+    tty: true
+  frontend3:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3005:3000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend3
+    command: npm start
+    tty: true

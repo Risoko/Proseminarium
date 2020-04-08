@@ -1,0 +1,25 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <form method='post'>
+      {% csrf_token %}
+      {{form.as_p}}
+      <input type='submit' value='Create'>
+    </form>
+    <form method='post'>
+        {% csrf_token %}
+        <input id='pesel' name='user_pesel' type="text">
+        <input type='submit' value='Delete'>
+    </form>
+  </body>
+</html>
+
+
+<html>
+  <head>
+  </head>
+  <body>
+
+  </body>
+</html>
